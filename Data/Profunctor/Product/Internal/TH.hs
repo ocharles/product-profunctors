@@ -62,12 +62,12 @@ newtypeInstance conName tyName = do
   return [InstanceD [] (ConT ''N.Newtype `AppT` ConT tyName) body]
 
 dataDecStuffOfInfo :: Info -> Either Error (Name, [Name], Name, [Name])
-dataDecStuffOfInfo (TyConI (DataD _cxt tyName tyVars constructors _deriving)) =
+dataDecStuffOfInfo (TyConI (DataD _cxt tyName tyVars _ constructors _deriving)) =
   do
     (conName, conTys) <- extractConstructorStuff constructors
     let tyVars' = map varNameOfBinder tyVars
     return (tyName, tyVars', conName, conTys)
-dataDecStuffOfInfo (TyConI (NewtypeD _cxt tyName tyVars constructor _deriving)) =
+dataDecStuffOfInfo (TyConI (NewtypeD _cxt tyName tyVars _ constructor _deriving)) =
   do
     (conName, conTys) <- extractConstructorStuff [constructor]
     let tyVars' = map varNameOfBinder tyVars
